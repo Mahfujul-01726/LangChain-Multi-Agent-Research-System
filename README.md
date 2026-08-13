@@ -12,10 +12,18 @@
   An autonomous, multi-agent research system built with LangChain that searches the web, extracts deep content, writes structured reports, and evaluates its own output — end to end.
 </p>
 
+<p align="center">
+  <strong>🚀 Live Demo:</strong>
+  <a href="https://langchain-multi-agent-research-system-xpvc.onrender.com">langchain-multi-agent-research-system-xpvc.onrender.com</a>
+  <br/>
+  <sub>Deployed on Render (free tier) — note the first load may take ~50s while the service wakes from idle.</sub>
+</p>
+
 ---
 
 ## Table of Contents
 
+- [Live Demo](#live-demo)
 - [Overview](#overview)
 - [Key Features](#key-features)
 - [Architecture](#architecture)
@@ -26,6 +34,7 @@
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
+- [Deployment](#deployment)
 - [Screenshots](#screenshots)
 - [Sample Outputs](#sample-outputs)
 - [Project Structure](#project-structure)
@@ -34,6 +43,16 @@
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
+
+---
+
+## Live Demo
+
+Try the hosted version of the app — no setup required:
+
+**👉 [https://langchain-multi-agent-research-system-xpvc.onrender.com](https://langchain-multi-agent-research-system-xpvc.onrender.com)**
+
+> **Note:** The app runs on Render's **free tier**, so it sleeps after ~15 minutes of inactivity. The first request after a wake-up can take about 50 seconds to load.
 
 ---
 
@@ -230,6 +249,29 @@ python main.py
 ```
 
 Edit the `topic` variable in `main.py` to research a different subject. The pipeline logs each stage to the terminal with rich formatting.
+
+---
+
+## Deployment
+
+The project ships with a [Render blueprint](render.yaml), a [`Procfile`](Procfile), and a [`.streamlit/config.toml`](.streamlit/config.toml) so it can be deployed to [Render](https://render.com) with a single click.
+
+### One-click deploy (recommended)
+
+1. Push this repository to GitHub.
+2. In the [Render Dashboard](https://dashboard.render.com), click **New → Blueprint** and select the repository.
+3. Render reads `render.yaml`, creates the web service, and runs the first deploy automatically.
+4. Add the environment variables below in the service's **Environment** tab and redeploy (or set them when creating the service via the API).
+
+### Required environment variables
+
+| Variable | Value |
+|----------|-------|
+| `TAVILY_API_KEY` | Your Tavily search API key |
+| `OPENROUTER_API_KEY` | Your OpenRouter API key |
+| `OPENROUTER_MODEL` | `openrouter/free` (default) |
+
+> **Note:** The `startCommand` in `render.yaml` runs `streamlit run app.py --server.port 10000 --server.address 0.0.0.0`, and the health check uses `/_stcore/health`. Never commit API keys — set them only as Render environment variables.
 
 ---
 
