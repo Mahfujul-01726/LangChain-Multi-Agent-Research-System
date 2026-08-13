@@ -15,6 +15,10 @@ trafilatura
 requests>=2.31.0
 lxml>=5.0.0
 
+# PDF export
+markdown
+xhtml2pdf
+
 # Environment variables
 python-dotenv>=1.0.0
 

@@ -4,11 +4,18 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from src.tools.tools import web_search, scrape_url
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
-# Model Initialization
-llm = ChatOpenAI(model = "gpt-4o-mini",temperature=0)
+# Model Initialization (OpenRouter - free models)
+llm = ChatOpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=os.getenv("OPENROUTER_API_KEY"),
+    model=os.getenv("OPENROUTER_MODEL", "openai/gpt-oss-120b:free"),
+    temperature=0,
+    max_retries=5,
+)
 
 
 # 1st Agent : Search Agent

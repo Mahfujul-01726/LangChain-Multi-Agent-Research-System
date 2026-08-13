@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.11+-blue?logo=python&logoColor=white" alt="Python 3.11+"/>
   <img src="https://img.shields.io/badge/LangChain-0.2+-green?logo=langchain" alt="LangChain"/>
-  <img src="https://img.shields.io/badge/OpenAI-GPT--4o--mini-blue" alt="OpenAI GPT-4o-mini"/>
+  <img src="https://img.shields.io/badge/OpenRouter-Free%20Models-blue" alt="OpenRouter Free Models"/>
   <img src="https://img.shields.io/badge/Streamlit-UI-red" alt="Streamlit"/>
   <img src="https://img.shields.io/badge/License-Apache--2.0-blue" alt="License"/>
 </p>
@@ -57,7 +57,8 @@ The pipeline is exposed through two interfaces: an interactive, fully-styled **S
 | 📄 **Resilient Content Extraction** | Three-tier scraping pipeline with graceful fallbacks (trafilatura → readability → raw HTML) |
 | ✍️ **AI Report Generation** | Structured reports with introduction, key findings, conclusion, and cited sources |
 | 🧐 **Self-Evaluation** | Built-in critic that scores reports from 1–10 and lists strengths and improvement areas |
-| 🖥️ **Interactive UI** | Custom-designed Streamlit interface with live pipeline status and report downloads |
+| 🖥️ **Modern UI** | Clean light-mode Streamlit interface with live pipeline progress, animated step cards, and auto-extracted quality metrics |
+| 📄 **PDF Export** | Download the final report as a formatted A4 PDF, or the full research bundle as JSON |
 | 🧩 **Modular Design** | Clean separation between agents, tools, and pipelines for easy extension |
 
 ---
@@ -128,12 +129,14 @@ User Input → ① Search → ② Read → ③ Write → ④ Critique → Final 
 | Technology | Purpose |
 |------------|---------|
 | [LangChain](https://www.langchain.com/) | Agent creation and chain orchestration |
-| [OpenAI GPT-4o-mini](https://platform.openai.com/) | Language model powering agents and chains |
+| [OpenRouter](https://openrouter.ai/) | Free LLM access for agents and chains (default: `openrouter/free` auto-router) |
 | [Tavily](https://tavily.com/) | Web search and information retrieval |
 | [Trafilatura](https://trafilatura.readthedocs.io/) | Primary article/blog content extraction |
 | [Readability-lxml](https://pypi.org/project/readability-lxml/) | Secondary content extraction strategy |
 | [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/) | HTML parsing and fallback extraction |
 | [Streamlit](https://streamlit.io/) | Interactive web application |
+| [Markdown](https://python-markdown.github.io/) | Converts reports to HTML for PDF export |
+| [xhtml2pdf](https://xhtml2pdf.readthedocs.io/) | Renders HTML reports to PDF |
 | [python-dotenv](https://pypi.org/project/python-dotenv/) | Environment configuration management |
 | [Rich](https://github.com/Textualize/rich) | Rich terminal output formatting |
 
@@ -142,7 +145,7 @@ User Input → ① Search → ② Read → ③ Write → ④ Critique → Final 
 ## Prerequisites
 
 - **Python 3.11 or higher**
-- An **OpenAI API Key** (model access via `langchain-openai`)
+- An **OpenRouter API Key** (free — sign up at [openrouter.ai](https://openrouter.ai), no credit card required)
 - A **Tavily API Key** (web search)
 
 ---
@@ -190,18 +193,21 @@ pip install -r requirements.txt
 Create a `.env` file in the project root:
 
 ```bash
-OPENAI_API_KEY=your_openai_api_key_here
 TAVILY_API_KEY=your_tavily_api_key_here
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_MODEL=openrouter/free   # optional, defaults to OpenRouter's free auto-router
 ```
 
 > **Security Note:** The `.env` file is already excluded via `.gitignore` and must **never** be committed to version control.
 
+The LLM is configured in `src/agents/agents.py` with built-in retries (`max_retries=5`) to handle transient rate limits on OpenRouter free models. To pin a specific free model, set `OPENROUTER_MODEL` (e.g. `google/gemma-4-31b-it:free`).
+
 Obtain your API keys here:
 
-| Service | Where to get it |
-|---------|-----------------|
-| OpenAI | https://platform.openai.com/api-keys |
-| Tavily | https://tavily.com |
+| Service | Where to get it | Cost |
+|---------|-----------------|------|
+| OpenRouter | https://openrouter.ai/settings/keys | Free (no credit card) |
+| Tavily | https://tavily.com | Free tier available |
 
 ---
 
@@ -213,7 +219,7 @@ Obtain your API keys here:
 streamlit run app.py
 ```
 
-Open [http://localhost:8501](http://localhost:8501) in your browser, enter a topic, and click **Run Research Pipeline**. The interface shows live status for each pipeline step and lets you download the final report as Markdown.
+Open [http://localhost:8501](http://localhost:8501) in your browser, enter a topic, and click **Run Research Pipeline**. The interface shows a live progress bar and animated step cards as each agent works, then renders the final report with quality metrics and download options (PDF or JSON).
 
 ### Option 2 — CLI Script
 
@@ -266,17 +272,19 @@ Each run produces:
   - Listed strengths
   - Concrete areas for improvement
   - A one-line verdict
-- **Downloadable Markdown report** via the web UI
+- **Downloadable report** via the web UI:
+  - **PDF** — formatted A4 research report
+  - **JSON** — full bundle (topic, search results, scraped content, report, feedback)
 
 ---
 
 ## Roadmap
 
 - [ ] Streaming token-by-token report generation
-- [ ] Support for alternative LLM providers (Anthropic, Gemini, local models)
+- [ ] Support for additional LLM providers (Gemini, local models)
 - [ ] Configurable number of search results and scraping depth
 - [ ] Multi-URL reading for broader coverage
-- [ ] Export to PDF / DOCX
+- [ ] DOCX export alongside PDF
 - [ ] Unit tests and CI pipeline
 
 ---
@@ -305,8 +313,8 @@ This project is licensed under the **Apache License 2.0** — see the [LICENSE](
 
 - Built on [LangChain](https://www.langchain.com/) — agent & chain orchestration
 - Search powered by [Tavily](https://tavily.com/)
+- LLM inference via [OpenRouter](https://openrouter.ai/) free models
 - UI built with [Streamlit](https://streamlit.io/)
-- LLM inference via [OpenAI](https://openai.com/)
 - Inspired by agentic AI research patterns
 
 ---
