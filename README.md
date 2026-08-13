@@ -26,6 +26,8 @@
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
+- [Screenshots](#screenshots)
+- [Sample Outputs](#sample-outputs)
 - [Project Structure](#project-structure)
 - [Output](#output)
 - [Roadmap](#roadmap)
@@ -231,6 +233,41 @@ Edit the `topic` variable in `main.py` to research a different subject. The pipe
 
 ---
 
+## Screenshots
+
+The web UI guides you through three stages:
+
+<p align="center">
+  <img src="docs/screenshots/ui1.png" alt="UI 1 — Main interface" width="800"/>
+  <br/>
+  <em>UI 1 — Main interface: research request input and pipeline overview</em>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/ui2.png" alt="UI 2 — Live pipeline execution" width="800"/>
+  <br/>
+  <em>UI 2 — Live pipeline execution with animated progress loader and step status</em>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/ui3.png" alt="UI 3 — Results" width="800"/>
+  <br/>
+  <em>UI 3 — Results: quality score metrics, final report, critic feedback, and download buttons</em>
+</p>
+
+---
+
+## Sample Outputs
+
+Example files produced by a real run are included in [`docs/samples`](docs/samples):
+
+| File | Description |
+|------|-------------|
+| [sample-report.pdf](docs/samples/sample-report.pdf) | The final research report exported as a formatted PDF |
+| [sample-bundle.json](docs/samples/sample-bundle.json) | The full research bundle — topic, search results, scraped content, report, and critic feedback |
+
+---
+
 ## Project Structure
 
 ```
@@ -242,6 +279,10 @@ Edit the `topic` variable in `main.py` to research a different subject. The pipe
 ├── LICENSE                     # Apache License 2.0
 ├── .gitignore                  # Git ignore rules
 ├── demo.excalidraw             # Editable architecture diagram
+│
+├── docs/
+│   ├── screenshots/            # UI screenshots (ui1, ui2, ui3)
+│   └── samples/                # Sample report (PDF) and research bundle (JSON)
 │
 └── src/
     ├── __init__.py
